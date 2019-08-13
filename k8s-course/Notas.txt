@@ -1,0 +1,74 @@
+Crear máquina de kubernates (primera vez)
+$ minikube start --memory 4096 --vm-driver=kvm2
+
+Iniciar kubernates
+$ minikube start
+
+Consultar IP de minikube
+$ minikube ip
+
+Consultar todos los recursos:
+$ kubectl get all
+
+Consultar todos los pods
+$ kubectl get pods
+$ kubectl get pods -o wide
+
+Consultar información de un servicio
+$ kubectl describe service <nombre-servicio>
+
+Consulta información de un pod
+$ kubectl describe pod <nombre-pod>
+
+
+Aplicar configuración de un archivo
+$ kubectl apply -f <nombre-archivo.yaml>
+
+Ejecutar un comando dentro de un pod (contenedor)
+$ kubectl exec <nombre-pod> <comando-a-ejecutar>
+
+Ejecutar comandos en TTY dentro de un pod (contenedor)
+$ kubectl -it exec <nombre-pod> sh
+
+Eliminar todos los pods
+$ kubectl delete pod --all
+
+Visualizar traza de despliegue de un Deployment
+$ kubectl rollout status deployment <nombre-deployment>
+
+Listar espacio de nombres
+$ kubectl get ns
+
+Listar pods de un espacio de nombres específico
+$ kubectl get po -n kube-system
+
+Visualizar la historia de despliegue de un Deployment
+$ kubectl rollout history deployment <nombre-deployment>
+
+Volver a la versión anterior de un Deployment:
+$ kubectl rollout undo deployment <nombre-deployment> [--to-revision=<versión>]
+
+Ver logs de un pod
+$ kubectl logs <nombre-pod>
+
+KOPS
+Configurar KOPS
+$ export NAME=fleetman.k8s.local //for Cluster
+$ export KOPS_STATE_STORE=s3://test-kops-state-storage
+$ kops create cluster --zones us-east-1a,us-east-1b,us-east-1c ${NAME}
+$ kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
+$ ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa
+$ kops edit ig nodes --name ${NAME}
+$ kops get ig --name ${NAME}
+$ kops edit ig master-us-east-1a --name ${NAME} //master
+
+Iniciar creación de cluster
+$ kops update cluster ${NAME} --yes
+
+Eliminar un cluster
+$ kops delete cluster ${NAME} --yes
+
+
+Validar cluster
+$ kops validate cluster
+
