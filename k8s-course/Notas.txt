@@ -51,13 +51,29 @@ $ kubectl rollout undo deployment <nombre-deployment> [--to-revision=<versión>]
 Ver logs de un pod
 $ kubectl logs <nombre-pod>
 
+Ver volumenes
+$ kubectl get pv
+
+Listar los tipos de volumenes
+$ kubectl get storageclass
+
+
+Instalar kops
+https://github.com/kubernetes/kops/blob/master/docs/install.md
+
+
+
 KOPS
 Configurar KOPS
+$ export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
+$ export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+
 $ export NAME=fleetman.k8s.local //for Cluster
 $ export KOPS_STATE_STORE=s3://test-kops-state-storage
 $ kops create cluster --zones us-east-1a,us-east-1b,us-east-1c ${NAME}
-$ kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
 $ ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa
+$ kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
+$ kops edit cluster ${NAME} 
 $ kops edit ig nodes --name ${NAME}
 $ kops get ig --name ${NAME}
 $ kops edit ig master-us-east-1a --name ${NAME} //master
@@ -71,4 +87,9 @@ $ kops delete cluster ${NAME} --yes
 
 Validar cluster
 $ kops validate cluster
+
+Obtener los labels de los nodos:
+$ kubectl get nodes --show-labels
+
+
 
